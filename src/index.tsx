@@ -6,6 +6,7 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import { Provider } from "react-redux";
 import store from "./dados";
+import "./firebase";
 
 ReactDOM.render(
   <Provider store={store}>

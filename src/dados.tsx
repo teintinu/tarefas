@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import { ADICIONAR, ALTERNARFEITA, IAcaoTarefa, ITarefa, REMOVER } from "./acoes";
 
-function tarefas(state: ITarefa[] = [{ texto: "ss", feita: false }], action: IAcaoTarefa): ITarefa[] {
+function tarefas(state: ITarefa[] = [], action: IAcaoTarefa): ITarefa[] {
     switch (action.type) {
         case ADICIONAR:
             if (action.texto) {
