@@ -13,6 +13,9 @@ import { withStyles } from "material-ui/styles";
 import TextField from "material-ui/TextField";
 import Typography from "material-ui/Typography";
 import * as React from "react";
+// import { connect } from "react-redux";
+import { ADICIONAR } from "./acoes";
+import store from "./dados";
 
 const styles = (theme: any) => ({
   demo: {
@@ -27,19 +30,16 @@ const styles = (theme: any) => ({
   },
 });
 
-function generate(element: any) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
-class InteractiveList extends React.Component {
+class InteractiveList extends React.Component<{}> {
   public state = {
     dense: false,
     secondary: false,
   };
+
+  constructor(props: {}) {
+    super(props);
+    store.subscribe(() => this.setState({}));
+  }
 
   public render() {
     const { classes } = this.props as any;
@@ -56,18 +56,24 @@ class InteractiveList extends React.Component {
               id="name"
               label="Name"
               className={classes.textField}
-              value={""}
+              onKeyUp={
+                (e) => {
+                  const target = e.target as HTMLInputElement;
+                  store.dispatch({ type: ADICIONAR, texto: target.value });
+                }
+              }
               margin="normal"
             />
             <List dense={dense}>
-              {generate(
+              {tarefas().map((tarefa) =>
                 <ListItem>
                   <Checkbox
                     checked={false}
                     tabIndex={-1}
                     disableRipple
-                  />                    <ListItemText
-                    primary="Single-line item"
+                  />
+                  <ListItemText
+                    primary={tarefa.texto}
                     secondary={secondary ? "Secondary text" : null}
                   />
                   <ListItemSecondaryAction>
@@ -85,4 +91,9 @@ class InteractiveList extends React.Component {
   }
 }
 
+// export default connect()(withStyles(styles)(InteractiveList as any));
 export default withStyles(styles)(InteractiveList as any);
+
+function tarefas() {
+  return store.getState() || [];
+}
